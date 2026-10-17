@@ -132,6 +132,14 @@
   .callout p{margin:4px 0 0}
   .callout .btn{background:var(--navy);color:#fff}
 
+  .contact{display:flex;flex-wrap:wrap;gap:16px;align-items:center;justify-content:space-between;background:var(--white);border:1px solid var(--line);border-left:6px solid var(--teal);border-radius:var(--radius);padding:22px 24px}
+  .contact h3{font-size:30px;color:var(--navy)}
+  .contact p{margin:4px 0 0;color:var(--muted)}
+  .contact .ways{display:flex;flex-wrap:wrap;gap:10px}
+  .way{display:inline-flex;align-items:center;gap:8px;padding:11px 16px;border-radius:10px;font-weight:600;font-size:15px;text-decoration:none;border:1px solid var(--line);background:var(--bg);color:var(--navy);cursor:pointer;font-family:inherit}
+  .way:hover{border-color:var(--teal)}
+  .way small{font-weight:500;color:var(--muted)}
+
   /* Sign up */
   .signup{background:linear-gradient(160deg,var(--navy),var(--navy-2));color:#fff}
   .signup .sec-head h2{color:#fff} .signup .sec-head p{color:#A9BBCF}
@@ -167,6 +175,7 @@
     <a class="l" href="#prizes">Prizes</a>
     <a class="l" href="qualifying.html">Entrants</a>
     <a class="l" href="#signup">Sign up</a>
+    <a class="l" href="#contact">Contact</a>
   </div>
 </nav>
 
@@ -384,10 +393,25 @@
   </div>
 </section>
 
+<section id="contact" style="padding:48px 0">
+  <div class="wrap">
+    <div class="contact">
+      <div>
+        <h3>❓ Got questions?</h3>
+        <p>DM me on Discord or send an email and I'll get back to you.</p>
+      </div>
+      <div class="ways">
+        <button class="way" type="button" data-copy="phoenix001699">💬 Discord: phoenix001699 <small class="cp">(tap to copy)</small></button>
+        <a class="way" href="mailto:shinobilolbean@gmail.com">✉️ shinobilolbean@gmail.com</a>
+      </div>
+    </div>
+  </div>
+</section>
+
 <footer>
   <div class="wrap">
     <span>🏆 Oceania Championships 2026 · LOLBeans</span>
-    <span>Organiser &amp; enquiries: phoenix001699 (aka ninja)</span>
+    <span>Questions? Discord <b>phoenix001699</b> · <a href="mailto:shinobilolbean@gmail.com" style="color:#C9D6E5">shinobilolbean@gmail.com</a></span>
   </div>
 </footer>
 
@@ -435,6 +459,13 @@
   document.querySelectorAll("#timeline li").forEach(li => {
     if (new Date(li.dataset.date + "T23:59:59+10:00") < today) li.classList.add("done");
   });
+  // Copy Discord username
+  document.querySelectorAll("[data-copy]").forEach(btn => btn.addEventListener("click", async () => {
+    const tag = btn.querySelector(".cp");
+    try { await navigator.clipboard.writeText(btn.dataset.copy); if (tag) tag.textContent = "(copied!)"; }
+    catch (e) { if (tag) tag.textContent = "(copy failed)"; }
+    setTimeout(() => { if (tag) tag.textContent = "(tap to copy)"; }, 2000);
+  }));
 </script>
 </body>
 </html>
