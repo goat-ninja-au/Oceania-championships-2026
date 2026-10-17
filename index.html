@@ -127,6 +127,11 @@
   .prize .who{font-weight:600;color:var(--navy)}
   .prize .sm{font-size:13px;color:var(--muted)}
 
+  .callout{display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap;background:var(--gold-soft);border:2px solid var(--gold);border-radius:var(--radius);padding:18px 22px;margin-bottom:28px}
+  .callout h3{font-size:28px;color:var(--navy)}
+  .callout p{margin:4px 0 0}
+  .callout .btn{background:var(--navy);color:#fff}
+
   /* Sign up */
   .signup{background:linear-gradient(160deg,var(--navy),var(--navy-2));color:#fff}
   .signup .sec-head h2{color:#fff} .signup .sec-head p{color:#A9BBCF}
@@ -183,7 +188,7 @@
       <div class="cd"><b id="cd-s">--</b><small>Secs</small></div>
     </div>
     <div class="btns">
-      <a class="btn gold" href="#signup">Enter  Qualifying</a>
+      <a class="btn gold" href="#signup">Enter Qualifying</a>
       <a class="btn ghost" href="#players">See the players</a>
     </div>
   </div>
@@ -194,8 +199,8 @@
     <div class="sec-head"><div class="bar"></div><h2>Key Dates</h2><p>All times are QLD time (AEST).</p></div>
     <ul class="timeline" id="timeline">
       <li data-date="2026-10-18"><span class="d">18 October 2026</span><br><span class="w">Invitations released to the Oceania top 10</span></li>
-      <li data-date="2026-11-03"><span class="d">3 November 2026, 11:59 PM</span><br><span class="w"> Qualifying sign-ups close</span></li>
-      <li data-date="2026-11-27"><span class="d">10 – 27 November 2026</span><br><span class="w"> Qualifying</span></li>
+      <li data-date="2026-11-03"><span class="d">3 November 2026, 11:59 PM</span><br><span class="w">Qualifying sign-ups close</span></li>
+      <li data-date="2026-11-27"><span class="d">10 – 27 November 2026</span><br><span class="w">Qualifying</span></li>
       <li data-date="2026-11-27"><span class="d">27 November 2026</span><br><span class="w">Doubles sign-ups close</span></li>
       <li class="big" data-date="2026-12-01"><span class="d">1 December 2026</span><br><span class="w">Oceania Championships begins</span></li>
       <li class="big" data-date="2027-01-25"><span class="d">25 January 2027</span><br><span class="w">Oceania Championships ends (may finish earlier depending on attendance)</span></li>
@@ -205,7 +210,14 @@
 
 <section class="alt" id="players">
   <div class="wrap">
-    <div class="sec-head"><div class="bar gold"></div><h2>Acceptance List</h2><p>12 players: the top 10 who accepted from the Oceania Rankings, plus 2 from  Qualifying. Total time is the combined best times across all maps (lower is better).</p></div>
+    <div class="sec-head"><div class="bar gold"></div><h2>Acceptance List</h2><p>12 players: the top 10 who accepted from the Oceania Rankings, plus 2 from Qualifying. Total time is the combined best times across all maps (lower is better).</p></div>
+    <div class="callout">
+      <div>
+        <h3>🎟️ Not on the list?</h3>
+        <p>Register for <b>Qualifying</b> (10–27 November). The top <b>2</b> players qualify for the main event!</p>
+      </div>
+      <a class="btn" href="#signup">Register now</a>
+    </div>
     <div class="grid2">
       <div>
         <h3 class="sub">✅ Direct Acceptances</h3>
@@ -217,14 +229,14 @@
         </div>
       </div>
       <div>
-        <h3 class="sub">🎟️  Qualifying</h3>
+        <h3 class="sub">🎟️ Qualifying</h3>
         <div class="card goldc">
           <table>
             <thead><tr><th>#</th><th>Player</th><th class="num">Total Time</th></tr></thead>
-            <tbody id=""></tbody>
+            <tbody id="qualifiers"></tbody>
           </table>
         </div>
-        <p class="note">The 2  Qualifying spots are decided 10–27 November.</p>
+        <p class="note">The 2 Qualifying spots are decided 10–27 November.</p>
       </div>
     </div>
   </div>
@@ -232,7 +244,7 @@
 
 <section id="format">
   <div class="wrap">
-    <div class="sec-head"><div class="bar"></div><h2>Format</h2><p>Three events: the Singles main event,  Qualifying, and Doubles.</p></div>
+    <div class="sec-head"><div class="bar"></div><h2>Format</h2><p>Three events: the Singles main event, Qualifying, and Doubles.</p></div>
     <div class="cards">
       <div class="fcard">
         <div class="k">Main event</div>
@@ -246,7 +258,7 @@
       </div>
       <div class="fcard g">
         <div class="k">10 – 27 November</div>
-        <h3> Qualifying</h3>
+        <h3>Qualifying</h3>
         <ul>
           <li>Single-elimination bracket</li>
           <li>Open to Oceania Rankings players outside the top 10</li>
@@ -277,7 +289,7 @@
       <table>
         <thead><tr><th>Event</th><th>Match format</th></tr></thead>
         <tbody>
-          <tr><td class="name">Singles &amp;  Qualifying</td><td>Best of 3 sets, first to 6 wins, win by 2 (e.g. 6–3, 6–4). At 1 set all, play a third set. At 5–5, play on until someone leads by 2 (e.g. 7–5).</td></tr>
+          <tr><td class="name">Singles &amp; Qualifying</td><td>Best of 3 sets, first to 6 wins, win by 2 (e.g. 6–3, 6–4). At 1 set all, play a third set. At 5–5, play on until someone leads by 2 (e.g. 7–5).</td></tr>
           <tr><td class="name">Doubles</td><td>One set, first to 6 wins (e.g. 6–3).</td></tr>
         </tbody>
       </table>
@@ -336,7 +348,7 @@
       <div class="prize p1"><div class="medal">🥇</div><div class="amt">A$20</div><div class="who">Doubles Winners</div><div class="sm">per player</div></div>
       <div class="prize p2"><div class="medal">🥈</div><div class="amt">A$10</div><div class="who">Doubles Runners-up</div><div class="sm">per player</div></div>
     </div>
-    <p class="note"> Qualifying has no prize.</p>
+    <p class="note">Qualifying has no prize.</p>
   </div>
 </section>
 
@@ -345,7 +357,7 @@
     <div class="sec-head"><div class="bar gold"></div><h2>Sign Up</h2><p>Entry is free. You must be ranked on the Oceania Rankings.</p></div>
     <div class="su-grid">
       <div class="su">
-        <h3> Qualifying</h3>
+        <h3>Qualifying</h3>
         <p>For Oceania Rankings players outside the top 10. 2 spots in the main event up for grabs. Sign-ups close <b>3 November, 11:59 PM QLD</b>.</p>
         <a class="btn gold" id="wq-btn" href="https://docs.google.com/forms/d/1Js41sqoMN5xu9OGlDZiATAfTLAYrcjYOLP29faioXPc/viewform" target="_blank" rel="noopener">Sign up now</a>
       </div>
@@ -379,14 +391,14 @@
     ["Pioneer", "709.668"],
     ["GRUB C G", "713.251"]
   ];
-  const  = [null, null]; // e.g. ["Name", "720.000"]
+  const QUALIFIERS = [null, null]; // e.g. ["Name", "720.000"]
 
   const esc = s => String(s).replace(/[&<>"]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
   document.getElementById("direct").innerHTML = DIRECT.map((p, i) =>
     `<tr><td class="seed">${i + 1}</td><td class="name">${esc(p[0])}</td><td class="num">${esc(p[1])}</td></tr>`).join("");
-  document.getElementById("").innerHTML = .map((p, i) => p
+  document.getElementById("qualifiers").innerHTML = QUALIFIERS.map((p, i) => p
     ? `<tr><td class="seed">${11 + i}</td><td class="name">${esc(p[0])}</td><td class="num">${esc(p[1])}</td></tr>`
-    : `<tr><td class="seed">${11 + i}</td><td class="tbd"> Qualifier ${i + 1}</td><td class="num tbd">TBD</td></tr>`).join("");
+    : `<tr><td class="seed">${11 + i}</td><td class="tbd">Qualifier ${i + 1}</td><td class="num tbd">TBD</td></tr>`).join("");
 
   // Countdown to 1 Dec 2026, 00:00 QLD time
   const start = new Date("2026-12-01T00:00:00+10:00").getTime();
