@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Qualifying Entrants · Oceania Championships 2026</title>
-<meta name="description" content="Everyone registered for Qualifying at Oceania Championships 2026. The top 2 qualify for the main event.">
+<meta name="description" content="Everyone registered for Qualifying at Oceania Championships 2026. The 2 players who reach the final qualify for the main event.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -76,9 +76,9 @@
 
 <header class="hero">
   <div class="wrap">
-    <div class="eyebrow">10 – 27 November 2026</div>
+    <div class="eyebrow">Entries close Tue 27 October · Tournament 1 – 27 November 2026</div>
     <h1>Qualifying Entrants</h1>
-    <p>Everyone registered for Qualifying. The top 2 earn a spot in the Oceania Championships main event.</p>
+    <p>Everyone registered for Qualifying. Not in the top 10? This is your way in: the 2 players who reach the final earn a spot in Oceania Championships.</p>
     <div class="stats">
       <div class="stat"><b id="count">–</b><small>Registered</small></div>
       <div class="stat"><b>2</b><small>Spots</small></div>
@@ -103,9 +103,9 @@
     <p class="note" id="note">Listed in order of sign-up. New registrations can take up to 5 minutes to appear.</p>
 
     <div class="how">
-      <div><b>1. Register</b><span>Fill in the sign-up form by 3 November, 11:59 PM QLD.</span></div>
-      <div><b>2. Play the bracket</b><span>Single elimination, 10–27 November. Same format as Singles.</span></div>
-      <div><b>3. Qualify</b><span>The 2 semifinal winners join the main event on 1 December.</span></div>
+      <div><b>1. Register</b><span>Fill in the sign-up form by Tuesday 27 October, 11:59 PM QLD.</span></div>
+      <div><b>2. Play the bracket</b><span>Single elimination, 1–27 November. Same format as Singles.</span></div>
+      <div><b>3. Qualify</b><span>The 2 players who reach the final join the main event on 1 December.</span></div>
     </div>
   </div>
 </main>
@@ -117,8 +117,8 @@
 <script>
   // ---- Paste the "Publish to web" CSV link of your Public tab here ----
   const SHEET_CSV_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vR_ZuBb32NYDZjEpfJQYoDFsBmY146BN6M0rWDw03nYdyEq8HHZG1AT7zl-GFdr9qsdxhYn3SAPe9mh/pub?gid=2070118671&single=true&output=csv";
-  // Sign-ups close 3 November 2026, 11:59 PM QLD
-  const CLOSES = new Date("2026-11-03T23:59:59+10:00");
+  // Sign-ups close Tuesday 27 October 2026, 11:59 PM QLD
+  const CLOSES = new Date("2026-10-27T23:59:59+10:00");
 
   const esc = s => String(s).replace(/[&<>"]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
   const list = document.getElementById("list");
