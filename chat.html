@@ -51,6 +51,7 @@
   .meta b{color:var(--navy);font-size:14px;margin-right:6px}
   .meta .me{color:var(--teal)}
   .text{font-size:15px;overflow-wrap:anywhere;white-space:pre-wrap}
+  .text a{color:var(--teal);font-weight:500}
   .del,.ban{border:0;background:none;color:var(--red);font-size:12px;cursor:pointer;padding:0 4px;font-family:inherit}
   .empty{margin:auto;text-align:center;color:var(--muted)}
   .empty b{display:block;font-family:"Bebas Neue";font-size:28px;font-weight:400;color:var(--navy)}
@@ -95,7 +96,7 @@
 <main>
   <div class="wrap">
     <div class="rules">
-      <b>Chat rules:</b> Be respectful. No slurs, bullying or spam. <b>Never share personal info</b> (where you live, your school, phone number or socials). No links. Mods can delete messages and remove anyone.
+      <b>Chat rules:</b> Be respectful. No slurs, bullying or spam. <b>Never share personal info</b> (where you live, your school, phone number or socials). Mods can delete messages and remove anyone.
       Official questions? DM <b>phoenix001699</b> on Discord.
     </div>
 
@@ -141,10 +142,8 @@
   const msgs = $("msgs"), form = $("form"), nameIn = $("name"), textIn = $("text"),
         sendBtn = $("send"), statusEl = $("status");
 
-  const SLOW_MS = 8000; // slow mode: one message every 8 seconds
   // Blocked words (checked here for a friendly message, and again by the database rules)
   const BAD = /(n+[i1!|l]+[gq9]{2,}|f+[a@4]+[gq9]+[o0e]*t|r+[e3]+t+[a@4]+r+d|k+[i1]+k+e|w+[e3]+t+b+[a@4]+c+k)/i;
-  const LINK = /(https?:|www\.|\.(com|net|org|gg|io|xyz|ly)|discord\.gg)/i;
 
   let me = null, isAdmin = false, lastSent = 0, chatOpen = true;
 
@@ -153,6 +152,8 @@
 
   function setStatus(t, err = false) { statusEl.textContent = t; statusEl.classList.toggle("err", err); }
   const esc = s => String(s).replace(/[&<>"]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+  // Turn web addresses into clickable links (text is already escaped)
+  const linkify = s => s.replace(/(https?:\/\/[^\s<]+)/g, u => `<a href="${u}" target="_blank" rel="noopener noreferrer nofollow ugc">${u}</a>`);
   const COLORS = ["#13A89E","#C9962A","#2E86DE","#8E44AD","#D35400","#16A085","#C0392B","#2C3E50"];
   const colorFor = s => COLORS[[...s].reduce((a, c) => a + c.charCodeAt(0), 0) % COLORS.length];
   const timeOf = ts => new Date(ts).toLocaleTimeString([], { hour: "numeric", minute: "2-digit" });
@@ -169,7 +170,7 @@
         <div class="meta"><b class="${mine ? "me" : ""}">${esc(m.name)}</b>${m.ts ? timeOf(m.ts) : ""}
           ${isAdmin ? `<button class="del" data-id="${id}">delete</button><button class="ban" data-uid="${esc(m.uid)}" data-name="${esc(m.name)}">ban</button>` : ""}
         </div>
-        <div class="text">${esc(m.text)}</div>
+        <div class="text">${linkify(esc(m.text))}</div>
       </div>`;
     msgs.appendChild(el);
     if (nearBottom || mine) msgs.scrollTop = msgs.scrollHeight;
@@ -217,9 +218,6 @@
     if (!name) { nameIn.focus(); return setStatus("Pick a nickname first.", true); }
     if (!text) return;
     if (BAD.test(name) || BAD.test(text)) return setStatus("That message has a blocked word.", true);
-    if (LINK.test(text)) return setStatus("Links aren't allowed in chat.", true);
-    const wait = SLOW_MS - (Date.now() - lastSent);
-    if (wait > 0) return setStatus(`Slow mode: wait ${Math.ceil(wait / 1000)}s before sending again.`, true);
 
     try { localStorage.setItem("oce-chat-name", name); } catch (e) {}
     sendBtn.disabled = true;
@@ -232,7 +230,7 @@
       lastSent = Date.now();
       textIn.value = ""; setStatus("");
     } catch (err) {
-      setStatus("Message not sent. You may be sending too fast, or the chat is closed.", true);
+      setStatus("Message not sent. The chat may be closed, or you may be banned.", true);
     } finally {
       sendBtn.disabled = false; textIn.focus();
     }

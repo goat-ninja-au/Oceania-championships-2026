@@ -26,7 +26,7 @@
 
     "lastPost": {
       "$uid": {
-        ".write": "auth != null && auth.uid === $uid && newData.val() === now && (!data.exists() || data.val() <= now - 8000)"
+        ".write": "auth != null && auth.uid === $uid && newData.val() === now"
       }
     },
 
@@ -39,7 +39,7 @@
         "uid": { ".validate": "newData.val() === auth.uid" },
         "ts": { ".validate": "newData.val() === now" },
         "name": { ".validate": "newData.isString() && newData.val().length >= 1 && newData.val().length <= 20 && !newData.val().matches(/(n+[i1!|l]+[gq9]{2,}|f+[a@4]+[gq9]+[o0e]*t|r+[e3]+t+[a@4]+r+d|k+[i1]+k+e|w+[e3]+t+b+[a@4]+c+k)/i)" },
-        "text": { ".validate": "newData.isString() && newData.val().length >= 1 && newData.val().length <= 200 && !newData.val().matches(/(https?:|www\\.|\\.(com|net|org|gg|io|xyz|ly)|discord\\.gg)/i) && !newData.val().matches(/(n+[i1!|l]+[gq9]{2,}|f+[a@4]+[gq9]+[o0e]*t|r+[e3]+t+[a@4]+r+d|k+[i1]+k+e|w+[e3]+t+b+[a@4]+c+k)/i)" },
+        "text": { ".validate": "newData.isString() && newData.val().length >= 1 && newData.val().length <= 200 && !newData.val().matches(/(n+[i1!|l]+[gq9]{2,}|f+[a@4]+[gq9]+[o0e]*t|r+[e3]+t+[a@4]+r+d|k+[i1]+k+e|w+[e3]+t+b+[a@4]+c+k)/i)" },
         "$other": { ".validate": false }
       }
     }
