@@ -187,30 +187,30 @@
 
       <div class="row modes" id="modes" style="margin-top:14px">
         <span class="hint" style="margin:0">Ghost view:</span>
-        <button class="btn on" data-m="bean">👻 Bean only</button>
-        <button class="btn" data-m="full">Full overlay</button>
+        <button class="btn on" data-m="full">👻 Ghost overlay</button>
+        <button class="btn" data-m="bean">Bean only</button>
         <button class="btn" data-m="pip">Picture-in-picture</button>
         <button class="btn" data-m="side">Side by side</button>
       </div>
 
-      <div class="sliders" id="beanSliders">
+      <div class="sliders" id="beanSliders" hidden>
         <div class="sl"><label>Ghost window size <span id="swV">22%</span></label><input type="range" id="sw" min="8" max="45" value="22"></div>
         <div class="sl"><label>Window ↔ <span id="sxV">50%</span></label><input type="range" id="sx" min="10" max="90" value="50"></div>
         <div class="sl"><label>Window ↕ <span id="syV">68%</span></label><input type="range" id="sy" min="20" max="95" value="68"></div>
         <div class="sl"><label>Ghost strength <span id="opV">85%</span></label><input type="range" id="op" min="20" max="100" value="85"></div>
       </div>
-      <div class="sliders" id="fullSliders" hidden>
+      <div class="sliders" id="fullSliders">
         <div class="sl"><label>Ghost size <span id="scV">100%</span></label><input type="range" id="sc" min="70" max="130" value="100"></div>
         <div class="sl"><label>Ghost move ↔ <span id="xV">0</span></label><input type="range" id="x" min="-25" max="25" value="0" step="0.5"></div>
         <div class="sl"><label>Ghost move ↕ <span id="yV">0</span></label><input type="range" id="y" min="-25" max="25" value="0" step="0.5"></div>
-        <div class="sl"><label>&nbsp;</label></div>
+        <div class="sl"><label>Ghost strength <span id="opFV">30%</span></label><input type="range" id="opF" min="10" max="70" value="30"></div>
       </div>
       <div class="row" style="margin-top:10px" id="lookOpts">
-        <label class="hint" style="margin:0;display:flex;gap:6px;align-items:center"><input type="checkbox" id="tint" checked> Pink ghost tint</label>
+        <label class="hint" style="margin:0;display:flex;gap:6px;align-items:center"><input type="checkbox" id="tint"> Pink ghost tint</label>
         <label class="hint" style="margin:0;display:flex;gap:6px;align-items:center"><input type="checkbox" id="blend"> Glow blend</label>
         <label class="hint" style="margin:0;display:flex;gap:6px;align-items:center" id="ringOpt"><input type="checkbox" id="ring" checked> Show window outline</label>
       </div>
-      <div class="hint" id="modeHint">Bean only: your run stays 100% clear, and only a window around the ghost's bean shows. Move the window onto the ghost bean.</div>
+      <div class="hint" id="modeHint"></div>
     </div>
 
     <div class="stats">
@@ -224,7 +224,7 @@
       <ol>
         <li><b>Load two runs of the same map</b>, e.g. your PB as Run A and the world record as Run B.</li>
         <li><b>Line up the starts.</b> Use <b>Move this run only</b> to find the moment each round begins, then press <b>Set start</b>. From then on, both play together.</li>
-        <li><b>Place the ghost window.</b> In <b>Bean only</b> view, pause and drag the window sliders so the pink outline sits over the ghost bean. Try <b>Side by side</b> or <b>Picture-in-picture</b> if the routes are very different.</li>
+        <li><b>Adjust the ghost.</b> Keep ghost strength around 20–35% so your run stays clear. If the two videos are different sizes (e.g. one has a taskbar), use ghost size and move to line them up.</li>
         <li><b>Play it in slow-mo</b> and watch where the ghost bean pulls ahead.</li>
         <li><b>Set both finishes</b> to see the exact gap in seconds and frames.</li>
       </ol>
@@ -242,7 +242,7 @@
   const start = { A: 0, B: 0 };              // seconds in each video where the round starts
   const finish = { A: null, B: null };       // seconds in each video where the bean qualifies
   const source = { A: null, B: null };       // { type:'yt', id } or { type:'file', name }
-  let playing = false, rate = 1, ytReady = false, ytQueue = [], mode = "bean";
+  let playing = false, rate = 1, ytReady = false, ytQueue = [], mode = "full";
 
   const $ = id => document.getElementById(id);
   const fmt = t => (t == null || isNaN(t)) ? "––.–––" : (t < 0 ? "-" : "") + Math.abs(t).toFixed(3);
@@ -416,7 +416,7 @@
   $("share").onclick = async () => {
     if (!(source.A?.type === "yt" && source.B?.type === "yt")) return alertish("Share links work when both runs are YouTube links.");
     const p = new URLSearchParams({ a: source.A.id, b: source.B.id, as: start.A.toFixed(3), bs: start.B.toFixed(3) });
-    p.set("m", mode); p.set("sw", $("sw").value); p.set("sx", $("sx").value); p.set("sy", $("sy").value);
+    p.set("m", mode); p.set("o", $("opF").value); p.set("sw", $("sw").value); p.set("sx", $("sx").value); p.set("sy", $("sy").value);
     if (finish.A != null) p.set("af", finish.A.toFixed(3));
     if (finish.B != null) p.set("bf", finish.B.toFixed(3));
     const link = location.origin + location.pathname + "#" + p.toString();
@@ -428,6 +428,7 @@
   document.addEventListener("DOMContentLoaded", async () => {
     const p = new URLSearchParams(location.hash.slice(1));
     ["sw", "sx", "sy"].forEach(k => { if (p.get(k)) $(k).value = p.get(k); });
+    if (p.get("o")) $("opF").value = p.get("o");
     if (p.get("m")) document.querySelector(`#modes [data-m="${p.get("m")}"]`)?.click(); else applyGhost();
     if (p.get("a")) { $("urlA").value = "https://youtu.be/" + p.get("a"); await loadSlot("A", { type: "yt", id: p.get("a"), start: +p.get("as") || 0, finish: p.get("af") ? +p.get("af") : null }); }
     if (p.get("b")) { $("urlB").value = "https://youtu.be/" + p.get("b"); await loadSlot("B", { type: "yt", id: p.get("b"), start: +p.get("bs") || 0, finish: p.get("bf") ? +p.get("bf") : null }); }
@@ -436,7 +437,7 @@
   // ---------- Ghost look ----------
   const HINTS = {
     bean: "Bean only: your run stays 100% clear, and only a window around the ghost's bean shows. Move the window onto the ghost bean.",
-    full: "Full overlay: the whole ghost video sits see-through on top. Use size and move to line up the maps.",
+    full: "Ghost overlay: your run plays normally, and the ghost run is a faint see-through layer on top. Keep ghost strength low (20–35%) so your run stays clear.",
     pip: "Picture-in-picture: the ghost plays fully clear in the corner while your run fills the screen.",
     side: "Side by side: both runs fully clear, next to each other, perfectly in sync."
   };
@@ -445,6 +446,7 @@
     const op = $("op").value, sc = $("sc").value, x = $("x").value, y = $("y").value;
     const sw = +$("sw").value, sx = +$("sx").value, sy = +$("sy").value;
     $("opV").textContent = op + "%"; $("scV").textContent = sc + "%"; $("xV").textContent = x; $("yV").textContent = y;
+    $("opFV").textContent = $("opF").value + "%";
     $("swV").textContent = sw + "%"; $("sxV").textContent = sx + "%"; $("syV").textContent = sy + "%";
     // reset
     Object.assign(L.style, { inset: "0", left: "", top: "", width: "", height: "", opacity: 1, transform: "none", filter: "none",
@@ -461,7 +463,7 @@
       Object.assign(L.style, { opacity: op / 100, filter: tint, mixBlendMode: blend, maskImage: mask, webkitMaskImage: mask });
       if ($("ring").checked) Object.assign(ringEl.style, { display: "block", left: (sx - w) + "%", top: (sy - h) + "%", width: (2 * w) + "%", height: (2 * h) + "%" });
     } else if (mode === "full") {
-      Object.assign(L.style, { opacity: op / 100, transform: `translate(${x}%, ${y}%) scale(${sc / 100})`, filter: tint, mixBlendMode: blend });
+      Object.assign(L.style, { opacity: $("opF").value / 100, transform: `translate(${x}%, ${y}%) scale(${sc / 100})`, filter: tint, mixBlendMode: blend });
     } else if (mode === "pip") {
       Object.assign(L.style, { inset: "auto", right: "2%", top: "4%", left: "auto", width: "34%", height: "34%", border: "2px solid var(--ghost)",
         borderRadius: "10px", boxShadow: "0 0 24px rgba(255,79,216,.45)" });
@@ -482,7 +484,7 @@
     document.querySelectorAll("#modes .btn").forEach(x => x.classList.toggle("on", x === b));
     applyGhost();
   });
-  ["op", "sc", "x", "y", "sw", "sx", "sy", "tint", "blend", "ring"].forEach(id => $(id).addEventListener("input", applyGhost));
+  ["op", "opF", "sc", "x", "y", "sw", "sx", "sy", "tint", "blend", "ring"].forEach(id => $(id).addEventListener("input", applyGhost));
   applyGhost();
 
   // ---------- Sync loop: keep the ghost locked to Run A ----------
