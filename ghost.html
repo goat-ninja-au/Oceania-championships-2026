@@ -69,6 +69,8 @@
   .hud{position:absolute;left:12px;top:12px;display:flex;gap:8px;z-index:5;pointer-events:none;flex-wrap:wrap}
   .chip{font-family:"JetBrains Mono";font-size:12px;padding:5px 9px;border-radius:8px;background:rgba(5,8,15,.75);border:1px solid var(--line)}
   .chip.b{color:var(--cyan);border-color:rgba(46,230,214,.4)} .chip.g{color:var(--ghost);border-color:rgba(255,79,216,.4)}
+  #spotRing{position:absolute;z-index:3;pointer-events:none;border:1.5px dashed rgba(255,79,216,.75);border-radius:50%;display:none}
+  .modes .btn.on{background:var(--ghost);color:#1A0216;border-color:var(--ghost)}
   .scan{position:absolute;inset:0;pointer-events:none;z-index:4;background:repeating-linear-gradient(0deg,rgba(255,255,255,.025) 0 1px,transparent 1px 3px)}
 
   /* Controls */
@@ -116,7 +118,7 @@
   <div class="wrap">
     <div class="tag">// Academy Lab · Module 01</div>
     <h1>GHOST RACE</h1>
-    <p>Load two runs of the same map. Your run plays normally, and the ghost plays see-through on top, so you can see both beans racing at once and spot exactly where time is won or lost.</p>
+    <p>Load two runs of the same map. Your run plays 100% clear, and the ghost bean appears on top, so you can see both beans racing at once and spot exactly where time is won or lost.</p>
   </div>
 </header>
 
@@ -149,6 +151,7 @@
     <div class="stage" id="stage">
       <div class="layer" id="baseLayer"><div id="ytA"></div></div>
       <div class="layer" id="ghostLayer"><div id="ytB"></div></div>
+      <div id="spotRing"></div>
       <div class="scan"></div>
       <div class="hud">
         <span class="chip b" id="hudA">A ––.–––</span>
@@ -182,16 +185,32 @@
       </div>
       <div class="hint">Use <b>Move this run only</b> to put each run on the exact moment the round starts, then press its <b>Set start</b>. Do the same on the moment each bean qualifies for <b>Set finish</b>.</div>
 
-      <div class="sliders">
-        <div class="sl"><label>Ghost opacity <span id="opV">45%</span></label><input type="range" id="op" min="10" max="90" value="45"></div>
+      <div class="row modes" id="modes" style="margin-top:14px">
+        <span class="hint" style="margin:0">Ghost view:</span>
+        <button class="btn on" data-m="bean">👻 Bean only</button>
+        <button class="btn" data-m="full">Full overlay</button>
+        <button class="btn" data-m="pip">Picture-in-picture</button>
+        <button class="btn" data-m="side">Side by side</button>
+      </div>
+
+      <div class="sliders" id="beanSliders">
+        <div class="sl"><label>Ghost window size <span id="swV">22%</span></label><input type="range" id="sw" min="8" max="45" value="22"></div>
+        <div class="sl"><label>Window ↔ <span id="sxV">50%</span></label><input type="range" id="sx" min="10" max="90" value="50"></div>
+        <div class="sl"><label>Window ↕ <span id="syV">68%</span></label><input type="range" id="sy" min="20" max="95" value="68"></div>
+        <div class="sl"><label>Ghost strength <span id="opV">85%</span></label><input type="range" id="op" min="20" max="100" value="85"></div>
+      </div>
+      <div class="sliders" id="fullSliders" hidden>
         <div class="sl"><label>Ghost size <span id="scV">100%</span></label><input type="range" id="sc" min="70" max="130" value="100"></div>
         <div class="sl"><label>Ghost move ↔ <span id="xV">0</span></label><input type="range" id="x" min="-25" max="25" value="0" step="0.5"></div>
         <div class="sl"><label>Ghost move ↕ <span id="yV">0</span></label><input type="range" id="y" min="-25" max="25" value="0" step="0.5"></div>
+        <div class="sl"><label>&nbsp;</label></div>
       </div>
-      <div class="row" style="margin-top:10px">
+      <div class="row" style="margin-top:10px" id="lookOpts">
         <label class="hint" style="margin:0;display:flex;gap:6px;align-items:center"><input type="checkbox" id="tint" checked> Pink ghost tint</label>
         <label class="hint" style="margin:0;display:flex;gap:6px;align-items:center"><input type="checkbox" id="blend"> Glow blend</label>
+        <label class="hint" style="margin:0;display:flex;gap:6px;align-items:center" id="ringOpt"><input type="checkbox" id="ring" checked> Show window outline</label>
       </div>
+      <div class="hint" id="modeHint">Bean only: your run stays 100% clear, and only a window around the ghost's bean shows. Move the window onto the ghost bean.</div>
     </div>
 
     <div class="stats">
@@ -205,7 +224,7 @@
       <ol>
         <li><b>Load two runs of the same map</b>, e.g. your PB as Run A and the world record as Run B.</li>
         <li><b>Line up the starts.</b> Use <b>Move this run only</b> to find the moment each round begins, then press <b>Set start</b>. From then on, both play together.</li>
-        <li><b>Line up the screens.</b> Use the ghost size and move sliders so the two maps overlap as closely as possible.</li>
+        <li><b>Place the ghost window.</b> In <b>Bean only</b> view, pause and drag the window sliders so the pink outline sits over the ghost bean. Try <b>Side by side</b> or <b>Picture-in-picture</b> if the routes are very different.</li>
         <li><b>Play it in slow-mo</b> and watch where the ghost bean pulls ahead.</li>
         <li><b>Set both finishes</b> to see the exact gap in seconds and frames.</li>
       </ol>
@@ -223,7 +242,7 @@
   const start = { A: 0, B: 0 };              // seconds in each video where the round starts
   const finish = { A: null, B: null };       // seconds in each video where the bean qualifies
   const source = { A: null, B: null };       // { type:'yt', id } or { type:'file', name }
-  let playing = false, rate = 1, ytReady = false, ytQueue = [];
+  let playing = false, rate = 1, ytReady = false, ytQueue = [], mode = "bean";
 
   const $ = id => document.getElementById(id);
   const fmt = t => (t == null || isNaN(t)) ? "––.–––" : (t < 0 ? "-" : "") + Math.abs(t).toFixed(3);
@@ -323,11 +342,12 @@
 
   function seekRace(t) { both().forEach(s => S[s].seek(start[s] + t)); }
   function playAll() {
+    $("spotRing").style.visibility = "hidden";
     if (!both().length) return;
     if (S.A && S.B) S.B.seek(start.B + (S.A.time() - start.A)); // line the ghost up before playing
     both().forEach(s => S[s].play()); playing = true; $("play").textContent = "❚❚";
   }
-  function pauseAll() { both().forEach(s => S[s].pause()); playing = false; $("play").textContent = "▶"; }
+  function pauseAll() { $("spotRing").style.visibility = ""; both().forEach(s => S[s].pause()); playing = false; $("play").textContent = "▶"; }
 
   $("play").onclick = () => playing ? pauseAll() : playAll();
   $("restart").onclick = () => { pauseAll(); seekRace(0); };
@@ -396,6 +416,7 @@
   $("share").onclick = async () => {
     if (!(source.A?.type === "yt" && source.B?.type === "yt")) return alertish("Share links work when both runs are YouTube links.");
     const p = new URLSearchParams({ a: source.A.id, b: source.B.id, as: start.A.toFixed(3), bs: start.B.toFixed(3) });
+    p.set("m", mode); p.set("sw", $("sw").value); p.set("sx", $("sx").value); p.set("sy", $("sy").value);
     if (finish.A != null) p.set("af", finish.A.toFixed(3));
     if (finish.B != null) p.set("bf", finish.B.toFixed(3));
     const link = location.origin + location.pathname + "#" + p.toString();
@@ -404,24 +425,64 @@
   function alertish(msg) { setStatus("B", msg, msg.includes("✓") ? "ok" : "err"); }
 
   // Load from share link
-  (async function () {
+  document.addEventListener("DOMContentLoaded", async () => {
     const p = new URLSearchParams(location.hash.slice(1));
+    ["sw", "sx", "sy"].forEach(k => { if (p.get(k)) $(k).value = p.get(k); });
+    if (p.get("m")) document.querySelector(`#modes [data-m="${p.get("m")}"]`)?.click(); else applyGhost();
     if (p.get("a")) { $("urlA").value = "https://youtu.be/" + p.get("a"); await loadSlot("A", { type: "yt", id: p.get("a"), start: +p.get("as") || 0, finish: p.get("af") ? +p.get("af") : null }); }
     if (p.get("b")) { $("urlB").value = "https://youtu.be/" + p.get("b"); await loadSlot("B", { type: "yt", id: p.get("b"), start: +p.get("bs") || 0, finish: p.get("bf") ? +p.get("bf") : null }); }
-  })();
+  });
 
   // ---------- Ghost look ----------
+  const HINTS = {
+    bean: "Bean only: your run stays 100% clear, and only a window around the ghost's bean shows. Move the window onto the ghost bean.",
+    full: "Full overlay: the whole ghost video sits see-through on top. Use size and move to line up the maps.",
+    pip: "Picture-in-picture: the ghost plays fully clear in the corner while your run fills the screen.",
+    side: "Side by side: both runs fully clear, next to each other, perfectly in sync."
+  };
   function applyGhost() {
-    const L = $("ghostLayer");
+    const L = $("ghostLayer"), B = $("baseLayer"), st = $("stage"), ringEl = $("spotRing");
     const op = $("op").value, sc = $("sc").value, x = $("x").value, y = $("y").value;
+    const sw = +$("sw").value, sx = +$("sx").value, sy = +$("sy").value;
     $("opV").textContent = op + "%"; $("scV").textContent = sc + "%"; $("xV").textContent = x; $("yV").textContent = y;
-    L.style.opacity = op / 100;
-    L.style.transform = `translate(${x}%, ${y}%) scale(${sc / 100})`;
+    $("swV").textContent = sw + "%"; $("sxV").textContent = sx + "%"; $("syV").textContent = sy + "%";
+    // reset
+    Object.assign(L.style, { inset: "0", left: "", top: "", width: "", height: "", opacity: 1, transform: "none", filter: "none",
+      mixBlendMode: "normal", maskImage: "none", webkitMaskImage: "none", border: "none", borderRadius: "0", boxShadow: "none" });
+    Object.assign(B.style, { inset: "0", width: "", right: "" });
+    st.style.aspectRatio = "16/9"; ringEl.style.display = "none";
     const tint = $("tint").checked ? "sepia(1) hue-rotate(260deg) saturate(3)" : "none";
-    L.style.filter = tint;
-    L.style.mixBlendMode = $("blend").checked ? "screen" : "normal";
+    const blend = $("blend").checked ? "screen" : "normal";
+
+    if (mode === "bean") {
+      // Only an oval around the ghost bean shows; edges fade out softly
+      const w = sw, h = sw * 1.25;
+      const mask = `radial-gradient(ellipse ${w}% ${h}% at ${sx}% ${sy}%, #000 55%, transparent 100%)`;
+      Object.assign(L.style, { opacity: op / 100, filter: tint, mixBlendMode: blend, maskImage: mask, webkitMaskImage: mask });
+      if ($("ring").checked) Object.assign(ringEl.style, { display: "block", left: (sx - w) + "%", top: (sy - h) + "%", width: (2 * w) + "%", height: (2 * h) + "%" });
+    } else if (mode === "full") {
+      Object.assign(L.style, { opacity: op / 100, transform: `translate(${x}%, ${y}%) scale(${sc / 100})`, filter: tint, mixBlendMode: blend });
+    } else if (mode === "pip") {
+      Object.assign(L.style, { inset: "auto", right: "2%", top: "4%", left: "auto", width: "34%", height: "34%", border: "2px solid var(--ghost)",
+        borderRadius: "10px", boxShadow: "0 0 24px rgba(255,79,216,.45)" });
+    } else if (mode === "side") {
+      st.style.aspectRatio = "32/9";
+      Object.assign(B.style, { inset: "0 50% 0 0" });
+      Object.assign(L.style, { inset: "0 0 0 50%", borderLeft: "2px solid var(--ghost)" });
+    }
+    $("beanSliders").hidden = mode !== "bean";
+    $("fullSliders").hidden = mode !== "full";
+    $("lookOpts").hidden = mode === "pip" || mode === "side";
+    $("ringOpt").hidden = mode !== "bean";
+    $("modeHint").textContent = HINTS[mode];
   }
-  ["op", "sc", "x", "y", "tint", "blend"].forEach(id => $(id).addEventListener("input", applyGhost));
+  $("modes").addEventListener("click", e => {
+    const b = e.target.closest("[data-m]"); if (!b) return;
+    mode = b.dataset.m;
+    document.querySelectorAll("#modes .btn").forEach(x => x.classList.toggle("on", x === b));
+    applyGhost();
+  });
+  ["op", "sc", "x", "y", "sw", "sx", "sy", "tint", "blend", "ring"].forEach(id => $(id).addEventListener("input", applyGhost));
   applyGhost();
 
   // ---------- Sync loop: keep the ghost locked to Run A ----------
