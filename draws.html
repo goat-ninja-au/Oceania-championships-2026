@@ -65,8 +65,28 @@
   .draw{margin-bottom:40px}
   .draw h2{font-size:34px;color:var(--navy)}
   .draw .sub{color:var(--muted);margin:4px 0 18px;font-size:15px}
-  .bracket{display:block}
-  .semis{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+  .bracket{display:grid;gap:26px}
+  .bhead,.brow{display:grid;grid-template-columns:minmax(0,1fr) 80px minmax(0,.75fr)}
+  .bhead span{font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);font-weight:700}
+  .bhead{margin-bottom:-14px}
+  .link{position:relative}
+  /* elbow joining the two player rows, then a line out to the qualifier slot */
+  .link::before{content:"";position:absolute;left:0;width:50%;bottom:25px;height:52px;border:2px solid #B8C6D6;border-left:0;border-radius:0 8px 8px 0}
+  .link::after{content:"";position:absolute;left:50%;right:0;bottom:50px;border-top:2px solid #B8C6D6}
+  .brow.done .link::before,.brow.done .link::after{border-color:var(--teal)}
+  .qslot{align-self:end;margin-bottom:11px;height:80px;box-sizing:border-box;background:var(--white);border:2px dashed #B8C6D6;border-radius:12px;padding:12px 16px;display:flex;flex-direction:column;justify-content:center}
+  .brow.done .qslot{border:2px solid var(--teal);background:var(--teal-soft)}
+  .qslot small{font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--teal);font-weight:700}
+  .qslot b{font-family:"Bebas Neue";font-size:28px;color:var(--navy);font-weight:400;line-height:1.1}
+  .qslot b.tbd{color:var(--muted);font-family:Inter;font-size:15px;font-style:italic;font-weight:500;padding:4px 0}
+  @media (max-width:700px){
+    .bhead{display:none}
+    .brow{grid-template-columns:1fr}
+    .link{height:26px}
+    .link::before{display:none}
+    .link::after{left:50%;right:auto;top:0;bottom:0;border-top:0;border-left:2px solid #B8C6D6}
+    .qslot{margin:0;height:auto}
+  }
   .match{background:var(--white);border:1px solid var(--line);border-radius:12px;overflow:hidden;box-shadow:0 4px 14px rgba(11,37,69,.06)}
   .match .mh{display:flex;justify-content:space-between;background:var(--navy);color:#fff;font-size:12px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;padding:8px 14px}
   .match .mh span:last-child{color:var(--gold)}
@@ -128,15 +148,17 @@
       <h2>🎟️ Qualifying Draw</h2>
       <p class="sub"><b>Win your semifinal and you qualify for Oceania Championships.</b> There is no final: both semifinal winners go straight into the main event. The top 2 seeds are placed at opposite ends of the draw, and the other players were drawn at random. Matches are played 1–27 November.</p>
 
-      <div class="qbox">
-        <div><small>Qualifier 1</small><div id="q1" style="border:0;padding:0;background:none"></div></div>
-        <div><small>Qualifier 2</small><div id="q2" style="border:0;padding:0;background:none"></div></div>
-      </div>
-
       <div class="bracket">
-        <div class="semis">
+        <div class="bhead"><span>Semifinals</span><span></span><span>Qualified for Oceania Championships</span></div>
+        <div class="brow">
           <div class="match" id="sf1"></div>
+          <div class="link"></div>
+          <div class="qslot" id="q1"></div>
+        </div>
+        <div class="brow">
           <div class="match" id="sf2"></div>
+          <div class="link"></div>
+          <div class="qslot" id="q2"></div>
         </div>
       </div>
       <p class="drawnote">Same format as Singles: best of 3 sets, first to 6, win by 2.</p>
@@ -189,9 +211,11 @@
   document.getElementById("sf2").innerHTML = matchHTML(DRAW.sf2, DRAW.sf2.a, DRAW.sf2.b, SEMI);
 
   // Who has qualified so far
-  const q = [winnerOf(DRAW.sf1), winnerOf(DRAW.sf2)];
-  document.getElementById("q1").innerHTML = q[0] ? `<b>${esc(q[0].name)}</b><span>Qualified ✓</span>` : `<b class="tbd">Winner of Semifinal 1</b><span>To be decided</span>`;
-  document.getElementById("q2").innerHTML = q[1] ? `<b>${esc(q[1].name)}</b><span>Qualified ✓</span>` : `<b class="tbd">Winner of Semifinal 2</b><span>To be decided</span>`;
+  [["sf1","q1",1],["sf2","q2",2]].forEach(([m,id,n]) => {
+    const w = winnerOf(DRAW[m]), el = document.getElementById(id);
+    el.innerHTML = `<small>Qualifier ${n}</small>` + (w ? `<b>${esc(w.name)} ✓</b>` : `<b class="tbd">Winner of Semifinal ${n}</b>`);
+    if (w) el.parentElement.classList.add("done");
+  });
 </script>
 </body>
 </html>
