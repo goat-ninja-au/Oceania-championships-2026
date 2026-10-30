@@ -61,6 +61,30 @@
   .how b{display:block;color:var(--navy)}
   .how span{font-size:14px;color:var(--muted)}
   footer{background:#071A33;color:#8FA3B8;padding:24px 0;font-size:14px}
+  /* Draw / bracket */
+  .draw{margin-bottom:40px}
+  .draw h2{font-size:34px;color:var(--navy)}
+  .draw .sub{color:var(--muted);margin:4px 0 18px;font-size:15px}
+  .bracket{display:grid;grid-template-columns:1fr 60px 1fr;align-items:center;gap:0}
+  .semis{display:grid;gap:22px}
+  .match{background:var(--white);border:1px solid var(--line);border-radius:12px;overflow:hidden;box-shadow:0 4px 14px rgba(11,37,69,.06)}
+  .match .mh{display:flex;justify-content:space-between;background:var(--navy);color:#fff;font-size:12px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;padding:8px 14px}
+  .match .mh span:last-child{color:var(--gold)}
+  .slot{display:flex;align-items:center;gap:10px;padding:12px 14px;border-top:1px solid var(--line)}
+  .slot:first-of-type{border-top:0}
+  .slot .seed{font-family:"Bebas Neue";font-size:20px;color:var(--gold-deep);width:30px}
+  .slot .pn{font-weight:600;color:var(--navy);flex:1}
+  .slot .rk{font-size:13px;color:var(--muted)}
+  .slot .sc{font-family:"Bebas Neue";font-size:22px;color:var(--navy);min-width:28px;text-align:right}
+  .slot.win{background:var(--gold-soft)} .slot.win .pn{color:#7A5A0F}
+  .slot.lose{opacity:.5}
+  .slot.tbd .pn{color:var(--muted);font-weight:500;font-style:italic}
+  .qbadge{font-size:11px;font-weight:700;color:#1E8449;background:#E3F6EA;border-radius:999px;padding:2px 8px;margin-left:6px}
+  .conn{height:100%;display:flex;align-items:center;justify-content:center}
+  .conn svg{width:60px;height:100%}
+  .final .mh{background:linear-gradient(90deg,var(--gold-deep),var(--gold))} .final .mh span:last-child{color:var(--navy)}
+  .drawnote{margin-top:14px;font-size:14px;color:var(--muted)}
+  @media (max-width:700px){ .bracket{grid-template-columns:1fr} .conn{display:none} .final{margin-top:22px} }
   @media (max-width:700px){ .how{grid-template-columns:1fr} nav a.l.hide-sm{display:none} td,th{padding:10px 12px} }
   @media (max-width:480px){ nav .brand{font-size:18px;white-space:normal;line-height:1.1} nav .wrap{gap:12px} }
 </style>
@@ -90,8 +114,22 @@
 
 <main>
   <div class="wrap">
+    <section class="draw" id="draw">
+      <h2>🏆 The Draw</h2>
+      <p class="sub">The top 2 on the Oceania Rankings are seeded and placed at opposite ends, so they can only meet in the final. The other players were drawn at random. <b>Win your semifinal and you're in</b>: both finalists qualify for Oceania Championships.</p>
+      <div class="bracket">
+        <div class="semis">
+          <div class="match" id="sf1"></div>
+          <div class="match" id="sf2"></div>
+        </div>
+        <div class="conn"><svg viewBox="0 0 60 200" preserveAspectRatio="none"><path d="M0 50 H30 V150 H0 M30 100 H60" fill="none" stroke="#D9E2EC" stroke-width="2" vector-effect="non-scaling-stroke"/></svg></div>
+        <div class="match final" id="fin"></div>
+      </div>
+      <p class="drawnote">Matches are played 1–27 November. Same format as Singles: best of 3 sets, first to 6, win by 2.</p>
+    </section>
+
     <div class="actions">
-      <h2>🎟️ Who's in</h2>
+      <h2>🎟️ Entrants</h2>
       <a class="btn" id="signup-btn" href="https://docs.google.com/forms/d/e/1FAIpQLSdOeSdJrkZRu8yX5ef_ujm9O-wXlqncITu1FnTjGbmQytwvdg/viewform" target="_blank" rel="noopener">Register now</a>
     </div>
 
@@ -180,6 +218,30 @@
         list.innerHTML = `<tr><td colspan="3" class="empty"><b>Couldn't load the list</b>Try refreshing in a minute.</td></tr>`;
       });
   }
+
+  // ---- Qualifying draw: edit results here ----
+  // For each match, set score (e.g. "2–0") and winner ("a" or "b") once it's played.
+  const DRAW = {
+    sf1:   { label: "Semifinal 1", a: { seed: 1, name: "Sharki", rank: "#18" },    b: { seed: "", name: "Milky", rank: "#22" }, scoreA: "", scoreB: "", winner: null },
+    sf2:   { label: "Semifinal 2", a: { seed: 2, name: "Olivetree", rank: "#19" }, b: { seed: "", name: "DragonFlame", rank: "#159" },        scoreA: "", scoreB: "", winner: null },
+    final: { label: "Final", scoreA: "", scoreB: "", winner: null }
+  };
+  function slotHTML(p, score, state, badge) {
+    if (!p) return `<div class="slot tbd"><span class="seed"></span><span class="pn">${state}</span></div>`;
+    return `<div class="slot ${state}"><span class="seed">${p.seed ? "[" + p.seed + "]" : ""}</span><span class="pn">${esc(p.name)}${badge ? '<span class="qbadge">QUALIFIED ✓</span>' : ""}</span><span class="rk">${esc(p.rank)}</span><span class="sc">${esc(score)}</span></div>`;
+  }
+  function matchHTML(m, a, b, qualifies, tbdA, tbdB) {
+    const st = side => m.winner ? (m.winner === side ? "win" : "lose") : "";
+    const status = m.winner ? "Final score" : "To be played";
+    return `<div class="mh"><span>${m.label}</span><span>${status}</span></div>` +
+      slotHTML(a, m.scoreA, a ? st("a") : tbdA, qualifies && m.winner === "a") +
+      slotHTML(b, m.scoreB, b ? st("b") : tbdB, qualifies && m.winner === "b");
+  }
+  const winnerOf = m => m.winner ? m[m.winner] : null;
+  document.getElementById("sf1").innerHTML = matchHTML(DRAW.sf1, DRAW.sf1.a, DRAW.sf1.b, true);
+  document.getElementById("sf2").innerHTML = matchHTML(DRAW.sf2, DRAW.sf2.a, DRAW.sf2.b, true);
+  DRAW.final.a = winnerOf(DRAW.sf1); DRAW.final.b = winnerOf(DRAW.sf2);
+  document.getElementById("fin").innerHTML = matchHTML(DRAW.final, DRAW.final.a, DRAW.final.b, false, "Winner of Semifinal 1", "Winner of Semifinal 2");
 </script>
 </body>
 </html>
