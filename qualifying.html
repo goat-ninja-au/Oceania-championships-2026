@@ -94,7 +94,7 @@
 <nav>
   <div class="wrap">
     <a class="brand" href="./">🏆 Oceania Championships 2026</a>
-    <a class="l hide-sm" href="./#players">Players</a>
+    <a class="l hide-sm" href="draws.html">Draws</a>
     <a class="l" href="./">← Main site</a>
   </div>
 </nav>
@@ -114,19 +114,10 @@
 
 <main>
   <div class="wrap">
-    <section class="draw" id="draw">
-      <h2>🏆 The Draw</h2>
-      <p class="sub">The top 2 on the Oceania Rankings are seeded and placed at opposite ends, so they can only meet in the final. The other players were drawn at random. <b>Win your semifinal and you're in</b>: both finalists qualify for Oceania Championships.</p>
-      <div class="bracket">
-        <div class="semis">
-          <div class="match" id="sf1"></div>
-          <div class="match" id="sf2"></div>
-        </div>
-        <div class="conn"><svg viewBox="0 0 60 200" preserveAspectRatio="none"><path d="M0 50 H30 V150 H0 M30 100 H60" fill="none" stroke="#D9E2EC" stroke-width="2" vector-effect="non-scaling-stroke"/></svg></div>
-        <div class="match final" id="fin"></div>
-      </div>
-      <p class="drawnote">Matches are played 1–27 November. Same format as Singles: best of 3 sets, first to 6, win by 2.</p>
-    </section>
+    <a href="draws.html" style="display:block;text-decoration:none;margin-bottom:28px;background:var(--navy);color:#fff;border-radius:12px;padding:18px 20px">
+      <b style="font-family:'Bebas Neue';font-size:26px;letter-spacing:.02em">🏆 The Qualifying draw is out!</b><br>
+      <span style="color:#C9D6E5">Win your semifinal and you qualify for Oceania Championships. See the draw →</span>
+    </a>
 
     <div class="actions">
       <h2>🎟️ Entrants</h2>
@@ -219,29 +210,6 @@
       });
   }
 
-  // ---- Qualifying draw: edit results here ----
-  // For each match, set score (e.g. "2–0") and winner ("a" or "b") once it's played.
-  const DRAW = {
-    sf1:   { label: "Semifinal 1", a: { seed: 1, name: "Sharki", rank: "#18" },    b: { seed: "", name: "Milky", rank: "#22" }, scoreA: "", scoreB: "", winner: null },
-    sf2:   { label: "Semifinal 2", a: { seed: 2, name: "Olivetree", rank: "#19" }, b: { seed: "", name: "DragonFlame", rank: "#159" },        scoreA: "", scoreB: "", winner: null },
-    final: { label: "Final", scoreA: "", scoreB: "", winner: null }
-  };
-  function slotHTML(p, score, state, badge) {
-    if (!p) return `<div class="slot tbd"><span class="seed"></span><span class="pn">${state}</span></div>`;
-    return `<div class="slot ${state}"><span class="seed">${p.seed ? "[" + p.seed + "]" : ""}</span><span class="pn">${esc(p.name)}${badge ? '<span class="qbadge">QUALIFIED ✓</span>' : ""}</span><span class="rk">${esc(p.rank)}</span><span class="sc">${esc(score)}</span></div>`;
-  }
-  function matchHTML(m, a, b, qualifies, tbdA, tbdB) {
-    const st = side => m.winner ? (m.winner === side ? "win" : "lose") : "";
-    const status = m.winner ? "Final score" : "To be played";
-    return `<div class="mh"><span>${m.label}</span><span>${status}</span></div>` +
-      slotHTML(a, m.scoreA, a ? st("a") : tbdA, qualifies && m.winner === "a") +
-      slotHTML(b, m.scoreB, b ? st("b") : tbdB, qualifies && m.winner === "b");
-  }
-  const winnerOf = m => m.winner ? m[m.winner] : null;
-  document.getElementById("sf1").innerHTML = matchHTML(DRAW.sf1, DRAW.sf1.a, DRAW.sf1.b, true);
-  document.getElementById("sf2").innerHTML = matchHTML(DRAW.sf2, DRAW.sf2.a, DRAW.sf2.b, true);
-  DRAW.final.a = winnerOf(DRAW.sf1); DRAW.final.b = winnerOf(DRAW.sf2);
-  document.getElementById("fin").innerHTML = matchHTML(DRAW.final, DRAW.final.a, DRAW.final.b, false, "Winner of Semifinal 1", "Winner of Semifinal 2");
 </script>
 </body>
 </html>

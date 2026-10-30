@@ -1,0 +1,203 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Draws · Oceania Championships 2026</title>
+<meta name="description" content="The draws for Oceania Championships 2026: Qualifying, the main event and Doubles.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🏆</text></svg>">
+<style>
+  :root{
+    --navy:#0B2545; --navy-2:#13315C;
+    --teal:#13A89E; --teal-soft:#E6F6F4;
+    --gold:#E9B949; --gold-deep:#C9962A; --gold-soft:#FBF3DF;
+    --ink:#1F2933; --muted:#52606D; --line:#D9E2EC; --bg:#F5F7FA; --white:#fff;
+    --radius:14px;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;font-family:Inter,system-ui,sans-serif;color:var(--ink);background:var(--bg);line-height:1.55}
+  h1,h2,h3{font-family:"Bebas Neue",Impact,sans-serif;font-weight:400;letter-spacing:.02em;margin:0}
+  .wrap{max-width:860px;margin:0 auto;padding:0 20px}
+
+  nav{position:sticky;top:0;z-index:10;background:rgba(11,37,69,.96)}
+  nav .wrap{display:flex;align-items:center;gap:20px;height:56px}
+  nav .brand{font-family:"Bebas Neue";color:var(--gold);font-size:22px;text-decoration:none;margin-right:auto;white-space:nowrap}
+  nav a.l{color:#C9D6E5;text-decoration:none;font-size:14px;font-weight:500;white-space:nowrap}
+  nav a.l:hover{color:#fff}
+
+  .hero{background:linear-gradient(160deg,var(--navy),var(--navy-2));color:#fff;padding:56px 0 48px;position:relative}
+  .hero::after{content:"";position:absolute;inset:auto 0 0 0;height:6px;background:linear-gradient(90deg,var(--teal),var(--gold))}
+  .eyebrow{color:var(--gold);font-weight:600;font-size:13px;letter-spacing:.18em;text-transform:uppercase}
+  .hero h1{font-size:clamp(44px,8vw,76px);line-height:.95;margin-top:8px}
+  .hero p{color:#C9D6E5;max-width:560px;margin:14px 0 0}
+
+  .stats{display:flex;gap:14px;flex-wrap:wrap;margin-top:26px}
+  .stat{background:rgba(255,255,255,.06);border:1px solid rgba(233,185,73,.35);border-radius:12px;padding:12px 18px;min-width:120px}
+  .stat b{display:block;font-family:"Bebas Neue";font-size:40px;line-height:1;color:var(--gold)}
+  .stat small{font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:#A9BBCF}
+
+  main{padding:40px 0 64px}
+  .card{background:var(--white);border:1px solid var(--line);border-radius:var(--radius);overflow:hidden}
+  table{width:100%;border-collapse:collapse;font-size:15px}
+  th{background:var(--gold-deep);color:#fff;text-align:left;font-weight:600;padding:12px 16px;font-size:13px;letter-spacing:.06em;text-transform:uppercase}
+  td{padding:12px 16px;border-top:1px solid var(--line)}
+  tbody tr:nth-child(even) td{background:var(--gold-soft)}
+  td.n{font-family:"Bebas Neue";font-size:22px;color:var(--navy);width:56px}
+  td.name{font-weight:600;color:var(--navy)}
+  td.r,th.r{text-align:right;font-variant-numeric:tabular-nums}
+  .empty{padding:36px 20px;text-align:center;color:var(--muted)}
+  .empty b{display:block;font-family:"Bebas Neue";font-size:28px;color:var(--navy);font-weight:400;margin-bottom:6px}
+  .note{font-size:13px;color:var(--muted);margin-top:12px}
+  .actions{display:flex;gap:12px;flex-wrap:wrap;margin-bottom:22px;align-items:center;justify-content:space-between}
+  .actions h2{font-size:34px;color:var(--navy)}
+  .btn{display:inline-block;padding:11px 18px;border-radius:10px;font-weight:600;text-decoration:none;font-size:15px;background:var(--gold);color:var(--navy)}
+  .btn:hover{background:#F2C960}
+  .btn.disabled{opacity:.55;pointer-events:none}
+  .how{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:32px}
+  .how div{background:var(--white);border:1px solid var(--line);border-top:4px solid var(--teal);border-radius:12px;padding:16px}
+  .how b{display:block;color:var(--navy)}
+  .how span{font-size:14px;color:var(--muted)}
+  footer{background:#071A33;color:#8FA3B8;padding:24px 0;font-size:14px}
+  /* Draw / bracket */
+  .draw{margin-bottom:40px}
+  .draw h2{font-size:34px;color:var(--navy)}
+  .draw .sub{color:var(--muted);margin:4px 0 18px;font-size:15px}
+  .bracket{display:grid;grid-template-columns:1fr 60px 1fr;align-items:center;gap:0}
+  .semis{display:grid;gap:22px}
+  .match{background:var(--white);border:1px solid var(--line);border-radius:12px;overflow:hidden;box-shadow:0 4px 14px rgba(11,37,69,.06)}
+  .match .mh{display:flex;justify-content:space-between;background:var(--navy);color:#fff;font-size:12px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;padding:8px 14px}
+  .match .mh span:last-child{color:var(--gold)}
+  .slot{display:flex;align-items:center;gap:10px;padding:12px 14px;border-top:1px solid var(--line)}
+  .slot:first-of-type{border-top:0}
+  .slot .seed{font-family:"Bebas Neue";font-size:20px;color:var(--gold-deep);width:30px}
+  .slot .pn{font-weight:600;color:var(--navy);flex:1}
+  .slot .rk{font-size:13px;color:var(--muted)}
+  .slot .sc{font-family:"Bebas Neue";font-size:22px;color:var(--navy);min-width:28px;text-align:right}
+  .slot.win{background:var(--gold-soft)} .slot.win .pn{color:#7A5A0F}
+  .slot.lose{opacity:.5}
+  .slot.tbd .pn{color:var(--muted);font-weight:500;font-style:italic}
+  .qbadge{font-size:11px;font-weight:700;color:#1E8449;background:#E3F6EA;border-radius:999px;padding:2px 8px;margin-left:6px}
+  .conn{height:100%;display:flex;align-items:center;justify-content:center}
+  .conn svg{width:60px;height:100%}
+  .final .mh{background:linear-gradient(90deg,var(--gold-deep),var(--gold))} .final .mh span:last-child{color:var(--navy)}
+  .drawnote{margin-top:14px;font-size:14px;color:var(--muted)}
+  @media (max-width:700px){ .bracket{grid-template-columns:1fr} .conn{display:none} .final{margin-top:22px} }
+  @media (max-width:700px){ .how{grid-template-columns:1fr} nav a.l.hide-sm{display:none} td,th{padding:10px 12px} }
+  @media (max-width:480px){ nav .brand{font-size:18px;white-space:normal;line-height:1.1} nav .wrap{gap:12px} }
+  .stake{background:var(--teal-soft);color:#0E6F68;font-size:13px;font-weight:600;padding:7px 14px;border-bottom:1px solid var(--line)}
+  .final .stake{background:var(--gold-soft);color:#7A5A0F}
+  .qbadge.gold{color:#7A5A0F;background:#F6E3A9}
+  .qbox{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin:6px 0 26px}
+  .qbox div{background:var(--white);border:2px solid var(--teal);border-radius:12px;padding:14px 16px;display:flex;flex-direction:column}
+  .qbox small{font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--teal);font-weight:700}
+  .qbox b{font-family:"Bebas Neue";font-size:28px;color:var(--navy);font-weight:400;line-height:1.1}
+  .qbox b.tbd{color:var(--muted);font-family:Inter;font-size:16px;font-style:italic;font-weight:500;padding:6px 0}
+  .qbox span{font-size:13px;color:var(--muted)}
+  .soon{background:var(--white);border:1px dashed var(--line);border-radius:12px;padding:18px;color:var(--muted)}
+  .soon b{color:var(--navy)}
+  .sec{margin-top:36px}
+  .sec h2{font-size:34px;color:var(--navy);margin:0}
+  .sec .sub{color:var(--muted);margin:4px 0 16px}
+  @media (max-width:700px){ .qbox{grid-template-columns:1fr} }
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="wrap">
+    <a class="brand" href="./">🏆 Oceania Championships 2026</a>
+    <a class="l hide-sm" href="qualifying.html">Entrants</a>
+    <a class="l" href="./">← Main site</a>
+  </div>
+</nav>
+
+<header class="hero">
+  <div class="wrap">
+    <div class="eyebrow">Qualifying · Main Event · Doubles</div>
+    <h1>The Draws</h1>
+    <p>Every bracket for Oceania Championships 2026, updated as results come in.</p>
+  </div>
+</header>
+
+<main>
+  <div class="wrap">
+    <section class="draw" id="qualifying">
+      <h2>🎟️ Qualifying Draw</h2>
+      <p class="sub"><b>Win your semifinal and you qualify for Oceania Championships.</b> The top 2 seeds are placed at opposite ends of the draw, and the other players were drawn at random. Matches are played 1–27 November.</p>
+
+      <div class="qbox">
+        <div><small>Qualifier 1</small><div id="q1" style="border:0;padding:0;background:none"></div></div>
+        <div><small>Qualifier 2</small><div id="q2" style="border:0;padding:0;background:none"></div></div>
+      </div>
+
+      <div class="bracket">
+        <div class="semis">
+          <div class="match" id="sf1"></div>
+          <div class="match" id="sf2"></div>
+        </div>
+        <div class="conn"><svg viewBox="0 0 60 200" preserveAspectRatio="none"><path d="M0 50 H30 V150 H0 M30 100 H60" fill="none" stroke="#D9E2EC" stroke-width="2" vector-effect="non-scaling-stroke"/></svg></div>
+        <div class="match final" id="fin"></div>
+      </div>
+      <p class="drawnote">Same format as Singles: best of 3 sets, first to 6, win by 2.</p>
+    </section>
+
+    <section class="sec">
+      <h2>👑 Main Event Draw</h2>
+      <p class="sub">12 players, 3 groups of 4. Starts 1 December.</p>
+      <div class="soon"><b>Coming soon.</b> The group draw will be posted here once the 2 qualifiers are decided.</div>
+    </section>
+
+    <section class="sec">
+      <h2>👥 Doubles Draw</h2>
+      <p class="sub">8 teams, single elimination. Starts 1 December.</p>
+      <div class="soon"><b>Coming soon.</b> The Doubles draw will be posted after sign-ups close on 27 November.</div>
+    </section>
+  </div>
+</main>
+
+<footer>
+  <div class="wrap">🏆 Oceania Championships 2026 · Questions? DM <b>phoenix001699</b> on Discord or email <a href="mailto:shinobilolbean@gmail.com" style="color:#C9D6E5">shinobilolbean@gmail.com</a></div>
+</footer>
+
+<script>
+  const esc = s => String(s).replace(/[&<>"]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+
+  // ---- Qualifying draw: edit results here ----
+  // When a match is played, fill in scoreA / scoreB (e.g. "2" and "1") and set winner to "a" or "b".
+  const DRAW = {
+    sf1:   { label: "Semifinal 1", a: { seed: 1, name: "Sharki" },    b: { seed: "", name: "Milky" },       scoreA: "", scoreB: "", winner: null },
+    sf2:   { label: "Semifinal 2", a: { seed: 2, name: "Olivetree" }, b: { seed: "", name: "DragonFlame" }, scoreA: "", scoreB: "", winner: null },
+    final: { label: "Qualifying Final", scoreA: "", scoreB: "", winner: null }
+  };
+
+  function slotHTML(p, score, state, qualified, champ) {
+    if (!p) return `<div class="slot tbd"><span class="seed"></span><span class="pn">${state}</span></div>`;
+    const tag = champ ? '<span class="qbadge gold">🏆 QUALIFYING CHAMPION</span>' : qualified ? '<span class="qbadge">✓ QUALIFIED</span>' : "";
+    return `<div class="slot ${state}"><span class="seed">${p.seed ? "[" + p.seed + "]" : ""}</span><span class="pn">${esc(p.name)}${tag}</span><span class="sc">${esc(score)}</span></div>`;
+  }
+  function matchHTML(m, a, b, opts) {
+    const st = side => m.winner ? (m.winner === side ? "win" : "lose") : "";
+    const status = m.winner ? "Result" : "To be played";
+    return `<div class="mh"><span>${m.label}</span><span>${status}</span></div>` +
+      `<div class="stake">${opts.stake}</div>` +
+      slotHTML(a, m.scoreA, a ? st("a") : opts.tbdA, opts.semi && m.winner === "a", opts.final && m.winner === "a") +
+      slotHTML(b, m.scoreB, b ? st("b") : opts.tbdB, opts.semi && m.winner === "b", opts.final && m.winner === "b");
+  }
+  const winnerOf = m => m.winner ? m[m.winner] : null;
+  const SEMI = { semi: true, stake: "⭐ Winner qualifies for Oceania Championships" };
+  document.getElementById("sf1").innerHTML = matchHTML(DRAW.sf1, DRAW.sf1.a, DRAW.sf1.b, SEMI);
+  document.getElementById("sf2").innerHTML = matchHTML(DRAW.sf2, DRAW.sf2.a, DRAW.sf2.b, SEMI);
+  DRAW.final.a = winnerOf(DRAW.sf1); DRAW.final.b = winnerOf(DRAW.sf2);
+  document.getElementById("fin").innerHTML = matchHTML(DRAW.final, DRAW.final.a, DRAW.final.b,
+    { final: true, stake: "Both finalists are already qualified. This is for the Qualifying title!", tbdA: "Winner of Semifinal 1", tbdB: "Winner of Semifinal 2" });
+
+  // Who has qualified so far
+  const q = [winnerOf(DRAW.sf1), winnerOf(DRAW.sf2)];
+  document.getElementById("q1").innerHTML = q[0] ? `<b>${esc(q[0].name)}</b><span>Qualified ✓</span>` : `<b class="tbd">Winner of Semifinal 1</b><span>To be decided</span>`;
+  document.getElementById("q2").innerHTML = q[1] ? `<b>${esc(q[1].name)}</b><span>Qualified ✓</span>` : `<b class="tbd">Winner of Semifinal 2</b><span>To be decided</span>`;
+</script>
+</body>
+</html>
